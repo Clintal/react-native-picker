@@ -42,13 +42,23 @@
 }
 -(void)makeuiWith:(NSArray *)topbgColor With:(NSArray *)bottombgColor With:(NSArray *)leftbtnbgColor With:(NSArray *)rightbtnbgColor With:(NSArray *)centerbtnColor
 {
+    UIColor *separatorColour = [[UIColor alloc]initWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];
+    
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.frame.size.width, 40)];
-    view.backgroundColor = [UIColor cyanColor];
+    view.backgroundColor=[self colorWith:topbgColor];
+    
+    UIView *viewTopHeaderSeparator = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.frame.size.width, 1)];
+    viewTopHeaderSeparator.backgroundColor = separatorColour;
+    
+    UIView *viewBottomHeaderSeparator = [[UIView alloc] initWithFrame:CGRectMake(0,40, self.frame.size.width, 1)];
+    viewBottomHeaderSeparator.backgroundColor = separatorColour;
     
     [self addSubview:view];
+    [self addSubview:viewTopHeaderSeparator];
+    [self addSubview:viewBottomHeaderSeparator];
     
     self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.leftBtn.frame = CGRectMake(0, 0, 90, 40);
+    self.leftBtn.frame = CGRectMake(0, 0, 90, 41);
     [self.leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 10.0, 0, 0)];
     [self.leftBtn setTitle:self.leftStr forState:UIControlStateNormal];
     [self.leftBtn setFont:[UIFont systemFontOfSize:[_pickerToolBarFontSize integerValue]]];
@@ -62,7 +72,7 @@
     view.backgroundColor=[self colorWith:topbgColor];
     
     self.rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.rightBtn.frame = CGRectMake(view.frame.size.width-90,0, 90, 40);
+    self.rightBtn.frame = CGRectMake(view.frame.size.width-90,0, 90, 41);
     [self.rightBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10.0)];
     [self.rightBtn setTitle:self.rightStr forState:UIControlStateNormal];
     self.rightBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentRight;
@@ -85,10 +95,14 @@
     
     [view addSubview:cenLabel];
 
-    self.pick = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 40, self.frame.size.width, self.frame.size.height - 40)];
+    self.pick = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 41, self.frame.size.width, self.frame.size.height - 41)];
     self.pick.delegate = self;
     self.pick.dataSource = self;
     self.pick.showsSelectionIndicator=YES;
+    
+    [self.pick selectRow:0 inComponent:0 animated:YES];
+
+    
     [self addSubview:self.pick];
     
     self.pick.backgroundColor=[self colorWith:bottombgColor];
