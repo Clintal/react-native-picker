@@ -144,6 +144,8 @@ public class PickerViewModule extends ReactContextBaseJavaModule implements Life
         if (activity != null && options.hasKey(PICKER_DATA)) {
             View view = activity.getLayoutInflater().inflate(R.layout.picker_view, null);
             RelativeLayout barLayout = (RelativeLayout) view.findViewById(R.id.barLayout);
+            View topHeaderSeparator = view.findViewById(R.id.topHeaderSeparator);
+            View belowHeaderSeparator = view.findViewById(R.id.belowHeaderSeparator);
             TextView cancelTV = (TextView) view.findViewById(R.id.cancel);
             TextView titleTV = (TextView) view.findViewById(R.id.title);
             TextView confirmTV = (TextView) view.findViewById(R.id.confirm);
@@ -164,7 +166,20 @@ public class PickerViewModule extends ReactContextBaseJavaModule implements Life
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     barViewHeight);
+            params.topMargin = 1;
+            
+            RelativeLayout.LayoutParams paramsHeaderLineTop = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    1);
+
+            RelativeLayout.LayoutParams paramsHeaderLineBottom = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    1);
+            paramsHeaderLineBottom.topMargin = (int) (activity.getResources().getDisplayMetrics().density * 39);
+
             barLayout.setLayoutParams(params);
+            topHeaderSeparator.setLayoutParams(paramsHeaderLineTop);
+            belowHeaderSeparator.setLayoutParams(paramsHeaderLineBottom);
 
             if (options.hasKey(PICKER_TOOL_BAR_BG)) {
                 ReadableArray array = options.getArray(PICKER_TOOL_BAR_BG);
