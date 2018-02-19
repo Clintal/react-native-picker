@@ -81,6 +81,7 @@
     
     [view addSubview:self.rightBtn];
     [self.rightBtn setFont:[UIFont systemFontOfSize:[_pickerToolBarFontSize integerValue]]];
+    [self.rightBtn.titleLabel setFont:[UIFont boldSystemFontOfSize:18.f]];
     [self.rightBtn addTarget:self action:@selector(cfirmAction) forControlEvents:UIControlEventTouchUpInside];  
     
     UILabel *cenLabel=[[UILabel alloc]initWithFrame:CGRectMake(90, 5, SCREEN_WIDTH-180, 30)];
