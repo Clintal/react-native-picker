@@ -12,7 +12,7 @@
 @implementation BzwPicker
 
 -(instancetype)initWithFrame:(CGRect)frame dic:(NSDictionary *)dic leftStr:(NSString *)leftStr centerStr:(NSString *)centerStr rightStr:(NSString *)rightStr topbgColor:(NSArray *)topbgColor bottombgColor:(NSArray *)bottombgColor leftbtnbgColor:(NSArray *)leftbtnbgColor rightbtnbgColor:(NSArray *)rightbtnbgColor centerbtnColor:(NSArray *)centerbtnColor selectValueArry:(NSArray *)selectValueArry  weightArry:(NSArray *)weightArry
-       pickerToolBarFontSize:(NSString *)pickerToolBarFontSize  pickerFontSize:(NSString *)pickerFontSize  pickerFontColor:(NSArray *)pickerFontColor pickerRowHeight:(NSString *)pickerRowHeight
+       pickerToolBarFontSize:(NSString *)pickerToolBarFontSize  pickerFontSize:(NSString *)pickerFontSize  pickerFontColor:(NSArray *)pickerFontColor pickerRowHeight:(NSString *)pickerRowHeight pickerFontFamily:(NSString *)pickerFontFamily
 
 {
     self = [super initWithFrame:frame];
@@ -29,6 +29,7 @@
         self.centStr=centerStr;
         self.pickerToolBarFontSize=pickerToolBarFontSize;
         self.pickerFontSize=pickerFontSize;
+        self.pickerFontFamily=pickerFontFamily;
         self.pickerFontColor=pickerFontColor;
         self.pickerRowHeight=pickerRowHeight;
         [self getStyle];
@@ -45,6 +46,7 @@
     UIColor *separatorColour = [[UIColor alloc]initWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.frame.size.width, 40)];
+
     view.backgroundColor=[self colorWith:topbgColor];
     
     UIView *viewTopHeaderSeparator = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.frame.size.width, 1)];
@@ -52,48 +54,45 @@
     
     UIView *viewBottomHeaderSeparator = [[UIView alloc] initWithFrame:CGRectMake(0,40, self.frame.size.width, 1)];
     viewBottomHeaderSeparator.backgroundColor = separatorColour;
-    
+
     [self addSubview:view];
     [self addSubview:viewTopHeaderSeparator];
     [self addSubview:viewBottomHeaderSeparator];
     
     self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.leftBtn.frame = CGRectMake(0, 0, 90, 41);
+
+    self.leftBtn.frame = CGRectMake(0, 0, 90, 40);
+    self.leftBtn.font = [UIFont fontWithName:_pickerFontFamily size:[_pickerToolBarFontSize integerValue]];
+    self.leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+
     [self.leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 10.0, 0, 0)];
     [self.leftBtn setTitle:self.leftStr forState:UIControlStateNormal];
-    [self.leftBtn setFont:[UIFont systemFontOfSize:[_pickerToolBarFontSize integerValue]]];
-    self.leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.leftBtn addTarget:self action:@selector(cancleAction) forControlEvents:UIControlEventTouchUpInside];
-    
     [self.leftBtn setTitleColor:[self colorWith:leftbtnbgColor] forState:UIControlStateNormal];
-    
+    [self.leftBtn addTarget:self action:@selector(cancleAction) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:self.leftBtn];
     
-    view.backgroundColor=[self colorWith:topbgColor];
-    
     self.rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.rightBtn.frame = CGRectMake(view.frame.size.width-90,0, 90, 41);
+
+    self.rightBtn.frame = CGRectMake(view.frame.size.width-90,0, 90, 40);
+    self.rightBtn.font = [UIFont fontWithName:_pickerFontFamily size:[_pickerToolBarFontSize integerValue]];
+    self.rightBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentRight;
+
     [self.rightBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10.0)];
     [self.rightBtn setTitle:self.rightStr forState:UIControlStateNormal];
-    self.rightBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentRight;
-    
     [self.rightBtn setTitleColor:[self colorWith:rightbtnbgColor] forState:UIControlStateNormal];
-    
+
     [view addSubview:self.rightBtn];
     [self.rightBtn setFont:[UIFont systemFontOfSize:[_pickerToolBarFontSize integerValue]]];
     [self.rightBtn.titleLabel setFont:[UIFont boldSystemFontOfSize:18.f]];
+
     [self.rightBtn addTarget:self action:@selector(cfirmAction) forControlEvents:UIControlEventTouchUpInside];  
+    [view addSubview:self.rightBtn];
     
     UILabel *cenLabel=[[UILabel alloc]initWithFrame:CGRectMake(90, 5, SCREEN_WIDTH-180, 30)];
-    
-    cenLabel.textAlignment=NSTextAlignmentCenter;
-    
-    [cenLabel setFont:[UIFont systemFontOfSize:[_pickerToolBarFontSize integerValue]]];
-    
     cenLabel.text=self.centStr;
-    
+    cenLabel.textAlignment=NSTextAlignmentCenter;
+    cenLabel.font = [UIFont fontWithName:_pickerFontFamily size:[_pickerToolBarFontSize integerValue]];
     [cenLabel setTextColor:[self colorWith:centerbtnColor]];
-    
     [view addSubview:cenLabel];
 
     self.pick = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 41, self.frame.size.width, self.frame.size.height - 41)];
@@ -544,8 +543,9 @@
                 NSDictionary *dic=[self.dataDry objectAtIndex:i];
                 
                 NSArray *ary=[dic allKeys];
-                
-                [self.provinceArray addObject:[ary firstObject]];
+                if ([ary firstObject]) {
+                    [self.provinceArray addObject:[ary firstObject]];
+                }
             }
             
             NSDictionary *dic=[self.dataDry firstObject];
@@ -632,7 +632,7 @@
             
         }];
     });
-    
+
     self.pick.hidden=YES;
 }
 //按了确定按钮
@@ -966,8 +966,7 @@
     
     if (lbl == nil) {
         lbl = [[UILabel alloc]init];
-        //在这里设置字体相关属性
-        lbl.font = [UIFont systemFontOfSize:[_pickerFontSize integerValue]];
+        lbl.font = [UIFont fontWithName:_pickerFontFamily size:[_pickerFontSize integerValue]];
         lbl.textColor = [self colorWith:_pickerFontColor];
         lbl.textAlignment = UITextAlignmentCenter;
     }
