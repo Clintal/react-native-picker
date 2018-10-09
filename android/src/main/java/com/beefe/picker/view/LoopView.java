@@ -107,7 +107,7 @@ public class LoopView extends View {
         gestureDetector = new GestureDetector(context, new LoopViewGestureListener(this));
         gestureDetector.setIsLongpressEnabled(false);
 
-        lineSpacingMultiplier = 2.0F;
+        lineSpacingMultiplier = 3.0F;
         isLoop = true;
         itemsVisible = 9;
         textSize = (int) (context.getResources().getDisplayMetrics().density * 16);
